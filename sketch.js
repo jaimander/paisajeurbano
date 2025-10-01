@@ -707,7 +707,7 @@ function avesaurio() {
       avesaurioL.width * escalaAvesaurio,
       avesaurioL.height * escalaAvesaurio
     );
-
+/*
     image(
       avesaurioL,
       0 + 20,
@@ -715,6 +715,7 @@ function avesaurio() {
       avesaurioL.width * escalaAvesaurio * 0.5,
       avesaurioL.height * escalaAvesaurio * 0.5
     );
+    */
   } else if (orientacionAvesaurio == 1) {
     image(
       avesaurioR,
@@ -723,6 +724,7 @@ function avesaurio() {
       avesaurioR.width * escalaAvesaurio,
       avesaurioR.height * escalaAvesaurio
     );
+    /*
 
     image(
       avesaurioR,
@@ -731,7 +733,9 @@ function avesaurio() {
       avesaurioR.width * escalaAvesaurio * 0.5,
       avesaurioR.height * escalaAvesaurio * 0.5
     );
+    */
   }
+    
   pop();
 }
 
@@ -836,6 +840,7 @@ function control() {
       if (seleccion == "avesaurio" && modoSeleccion == false) {
         xAvesaurio += map(gp.axes[0].toFixed(2), -1, 1, -2, 2);
         yAvesaurio += map(gp.axes[1].toFixed(2), -1, 1, -2, 2);
+        escalaAvesaurio += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
 
         if (gp.axes[0].toFixed(2) < 0) {
           orientacionAvesaurio = -1;
