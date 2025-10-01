@@ -230,6 +230,8 @@ let verMono = true;
 let verOjo = true;
 let verRadio = true;
 
+let escalaCanvas = 1.1;
+let escalaGeneral = escalaCanvas;
 //  -------------------- PRELOAD ------------------------------------------
 
 function preload() {
@@ -259,7 +261,11 @@ function preload() {
 //  -------------------- SETUP ------------------------------------------
 
 function setup() {
-  createCanvas(1024, 768);
+  cnv = createCanvas(1024*escalaCanvas, 768*escalaCanvas);
+
+  cnv.canvas.style.imageRendering = "pixelated"; 
+
+  noSmooth();
 
   visibilidadCapas(false);
 
@@ -325,7 +331,7 @@ function draw() {
     transY + temblorY
   );
 
-  scale(escala);
+  scale(escalaGeneral);
 
   control();
 
@@ -565,7 +571,11 @@ function tunel() {
 }
 
 function actualizarUI() {
+  let x = width-200;
+  let y = 40;
   if (modoSeleccion) {
+    //let x = width - 102;
+    //let y = 12;
     ui.push();
     ui.fill(0);
     ui.noStroke();
@@ -576,15 +586,17 @@ function actualizarUI() {
     ui.textSize(18);
     ui.textAlign(LEFT, TOP);
     let t = componentes[preseleccion];
-    ui.rect(width - 102, 12, 100, 30);
+    ui.rect(x, y, 100, 30);
     ui.fill(0);
     ui.noStroke();
-    ui.text(t, width - 100, 20);
+    ui.text(t, x+2, y+8);
     ui.pop();
   }
   if (modoSeleccion == true) {
     image(ui, 0, 0);
   }
+
+  let ySeleccion = height - 80;
 
   if (avisoEleccion < 100) {
     push();
@@ -597,10 +609,10 @@ function actualizarUI() {
     textSize(18);
     textAlign(LEFT, TOP);
     let t = seleccion;
-    rect(width - 102, height - 22, height - 20, 30);
+    rect(x, ySeleccion-2, 100, 30);
     fill(0);
     noStroke();
-    text(t, width - 100, height - 20);
+    text(t, x+2, ySeleccion+4);
     pop();
     avisoEleccion++;
   }
