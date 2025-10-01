@@ -49,6 +49,7 @@ let componentes = [
   "ojo",
   "radio",
   "diaynoche",
+  "misil",
 ];
 let preseleccion = 0;
 let botonFlechaDerechaReleased = true;
@@ -195,6 +196,14 @@ let radioX = 0;
 let radioY = 0;
 let radioEscala = 1;
 
+
+// misil
+let misil;
+let misilX = 0;
+let misilY = 0;
+let misilEscala = 1;
+
+
 // mono
 let monoL;
 let monoR;
@@ -229,8 +238,9 @@ let verDisparo = true;
 let verMono = true;
 let verOjo = true;
 let verRadio = true;
+let verMisil = true;
 
-let escalaCanvas = 1.1;
+let escalaCanvas = 1;
 let escalaGeneral = escalaCanvas;
 //  -------------------- PRELOAD ------------------------------------------
 
@@ -256,6 +266,8 @@ function preload() {
   ojo = loadImage("assets/ojo.gif");
 
   radio = loadImage("assets/radio.gif");
+
+  misil = loadImage("assets/misil.gif");
 }
 
 //  -------------------- SETUP ------------------------------------------
@@ -413,6 +425,11 @@ function draw() {
     tunel();
   }
 
+   // misil
+  if (verMisil) {
+    actulizarMisil();
+  }
+
   // disparo
   if (verDisparo) {
     actualizarDisparo();
@@ -452,6 +469,16 @@ function draw() {
 }
 
 //  -------------------- FUNCIONES ------------------------------------------
+function actulizarMisil(){
+  image(
+    misil,
+    misilX,
+    misilY,
+    misil.width * misilEscala,
+    misil.height * misilEscala
+  );
+}
+
 function visibilidadCapas(estado) {
   verSol = estado;
   verMontaña = estado;
@@ -470,6 +497,7 @@ function visibilidadCapas(estado) {
   verMono = estado;
   verOjo = estado;
   verRadio = estado;
+  verMisil = estado;
 }
 
 function actualizarRadio() {
@@ -776,6 +804,13 @@ function control() {
         gatoX += map(gp.axes[0].toFixed(2), -1, 1, -2, 2);
         gatoY += map(gp.axes[1].toFixed(2), -1, 1, -2, 2);
         gatoEscala += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
+      }
+
+      // misil
+      if (seleccion == "misil" && modoSeleccion == false) {
+        misilX += map(gp.axes[0].toFixed(2), -1, 1, -2, 2);
+        misilY += map(gp.axes[1].toFixed(2), -1, 1, -2, 2);
+        misilEscala += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
       }
 
       // radio
@@ -1908,6 +1943,10 @@ function keyPressed() {
 
    if (key == "j" || key == "J") {
     verRadio = !verRadio;
+  }
+
+   if (key == "k" || key == "K") {
+    verMisil = !verMisil;
   }
 
 
