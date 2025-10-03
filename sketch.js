@@ -50,6 +50,7 @@ let componentes = [
   "radio",
   "diaynoche",
   "misil",
+  "fuego",
 ];
 let preseleccion = 0;
 let botonFlechaDerechaReleased = true;
@@ -203,6 +204,12 @@ let misilX = 0;
 let misilY = 0;
 let misilEscala = 1;
 
+// fuego
+let fuego;
+let fuegoX = 0;
+let fuegoY = 0;
+let fuegoEscala = 1;
+
 
 // mono
 let monoL;
@@ -239,9 +246,12 @@ let verMono = true;
 let verOjo = true;
 let verRadio = true;
 let verMisil = true;
+let verFuego = true;
 
 let escalaCanvas = 1;
 let escalaGeneral = escalaCanvas;
+
+let tiempoAvisoSeleccion = 40;
 //  -------------------- PRELOAD ------------------------------------------
 
 function preload() {
@@ -268,6 +278,8 @@ function preload() {
   radio = loadImage("assets/radio.gif");
 
   misil = loadImage("assets/misil.gif");
+
+  fuego = loadImage("assets/fuego.gif");
 }
 
 //  -------------------- SETUP ------------------------------------------
@@ -385,6 +397,11 @@ function draw() {
     actualizarVentanas2();
   }
 
+  // fuego
+  if(verFuego){
+    actualizarFuego();
+  }
+
   // cinemateca
   if (verCinemateca) {
     cinemateca();
@@ -469,6 +486,16 @@ function draw() {
 }
 
 //  -------------------- FUNCIONES ------------------------------------------
+function actualizarFuego(){
+   image(
+    fuego,
+    fuegoX,
+    fuegoY,
+    fuego.width * fuegoEscala,
+    fuego.height * fuegoEscala
+  );
+}
+
 function actulizarMisil(){
   image(
     misil,
@@ -498,6 +525,7 @@ function visibilidadCapas(estado) {
   verOjo = estado;
   verRadio = estado;
   verMisil = estado;
+  verFuego = estado;
 }
 
 function actualizarRadio() {
@@ -614,10 +642,10 @@ function actualizarUI() {
     ui.textSize(18);
     ui.textAlign(LEFT, TOP);
     let t = componentes[preseleccion];
-    ui.rect(x, y, 100, 30);
+    ui.rect(x, y, 106, 30);
     ui.fill(0);
     ui.noStroke();
-    ui.text(t, x+2, y+8);
+    ui.text(t, x+5, y+8);
     ui.pop();
   }
   if (modoSeleccion == true) {
@@ -626,7 +654,7 @@ function actualizarUI() {
 
   let ySeleccion = height - 80;
 
-  if (avisoEleccion < 100) {
+  if (avisoEleccion < tiempoAvisoSeleccion) {
     push();
     fill(0);
     noStroke();
@@ -637,10 +665,10 @@ function actualizarUI() {
     textSize(18);
     textAlign(LEFT, TOP);
     let t = seleccion;
-    rect(x, ySeleccion-2, 100, 30);
+    rect(x, ySeleccion-3, 106, 30);
     fill(0);
     noStroke();
-    text(t, x+2, ySeleccion+4);
+    text(t, x+5, ySeleccion+4);
     pop();
     avisoEleccion++;
   }
@@ -817,6 +845,13 @@ function control() {
         misilEscala += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
       }
 
+      // misil
+      if (seleccion == "fuego" && modoSeleccion == false) {
+        fuegoX += map(gp.axes[0].toFixed(2), -1, 1, -2, 2);
+        fuegoY += map(gp.axes[1].toFixed(2), -1, 1, -2, 2);
+        fuegoEscala += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
+      }
+
       // radio
       if (seleccion == "radio" && modoSeleccion == false) {
         radioX += map(gp.axes[0].toFixed(2), -1, 1, -2, 2);
@@ -880,7 +915,7 @@ function control() {
       if (seleccion == "translate" && modoSeleccion == false) {
         transX += map(gp.axes[0].toFixed(2), -1, 1, -1, 1);
         transY += map(gp.axes[1].toFixed(2), -1, 1, -1, 1);
-        escala += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
+        escalaGeneral += map(gp.axes[3].toFixed(2), -1, 1, 0.001, -0.001);
       }
 
       // disparo
@@ -915,7 +950,7 @@ function control() {
       }
 
       // modo seleccion
-      if (gp.buttons[8].pressed && gp.buttons[9].pressed) {
+      if (!gp.buttons[8].pressed && gp.buttons[9].pressed) {
         //  print("boton 8 y 9");
         if (modoSeleccion == true && seleccionRelease == true) {
           modoSeleccion = false;
@@ -1067,7 +1102,7 @@ function control() {
       }
 
       // deseleccionar
-      if (gp.buttons[8].pressed) {
+      if (gp.buttons[8].pressed && !gp.buttons[9].pressed) {
         seleccion = "";
       }
 
@@ -1952,6 +1987,10 @@ function keyPressed() {
 
    if (key == "k" || key == "K") {
     verMisil = !verMisil;
+  }
+
+   if (key == "l" || key == "L") {
+    verFuego = !verFuego;
   }
 
 
